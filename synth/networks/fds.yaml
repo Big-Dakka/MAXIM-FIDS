@@ -1,0 +1,95 @@
+# Food Detection System
+
+arch: ai85fidnet
+dataset: FDS
+
+layers:
+- out_offset: 0x2000 #1
+  processors: 0x0000000000000007
+  operation: conv2d
+  kernel_size: 3x3
+  pad: 1
+  activate: ReLU
+  data_format: HWC
+  streaming: true
+- pad: 1 #2
+  operation: conv2d
+  kernel_size: 3x3
+  activate: ReLU
+  out_offset: 0x0000
+  processors: 0x00000000000ffff0
+  streaming: true
+- pad: 1 #3
+  operation: conv2d
+  kernel_size: 3x3
+  activate: ReLU
+  out_offset: 0x2000
+  processors: 0x00000fffff000000
+  streaming: true
+- pad: 1 #4
+  operation: conv2d
+  kernel_size: 3x3
+  activate: ReLU
+  out_offset: 0x0000
+  processors: 0x0fffff0000000000
+  streaming: true
+- max_pool: 2 #5
+  pool_stride: 2
+  pad: 1
+  operation: conv2d
+  kernel_size: 3x3
+  activate: ReLU
+  out_offset: 0x2000
+  processors: 0x0000000000fffff0
+  streaming: true
+- pad: 1 #6
+  operation: conv2d
+  kernel_size: 3x3
+  activate: ReLU
+  out_offset: 0x0000
+  processors: 0x000000fffff00000
+- pad: 1 #7
+  operation: conv2d
+  kernel_size: 3x3
+  activate: ReLU
+  out_offset: 0x2000
+  processors: 0x0fffff0000000000
+- max_pool: 2 #8
+  pool_stride: 2
+  pad: 1
+  operation: conv2d
+  kernel_size: 3x3
+  out_offset: 0x0000
+  processors: 0x00000fffffffffff
+- pad: 1 #9
+  operation: conv2d
+  kernel_size: 3x3
+  activate: ReLU
+  out_offset: 0x2000
+  processors: 0x0000ffffffffffff
+- max_pool: 2 #10
+  pool_stride: 2
+  pad: 1
+  operation: conv2d
+  kernel_size: 3x3
+  out_offset: 0x0000
+  processors: 0x0000ffffffffffff
+- pad: 0 #11
+  operation: conv2d
+  kernel_size: 1x1
+  activate: ReLU
+  out_offset: 0x2000
+  processors: 0x00ffffffffffff00
+- max_pool: 2 #12
+  pool_stride: 2
+  pad: 1
+  operation: conv2d
+  kernel_size: 3x3
+  out_offset: 0x0000
+  processors: 0xffffffffffffffff
+- out_offset: 0x2000 #13
+  processors: 0xffffffffffffffff
+  operation: conv2d
+  kernel_size: 1x1
+  pad: 0
+  output_width: 32
